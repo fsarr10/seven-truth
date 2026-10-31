@@ -63,21 +63,22 @@ export function HeroCanvas() {
       ref={containerRef}
       className="relative w-full h-[360px] sm:h-[440px] md:h-[500px] flex items-center justify-center overflow-hidden"
     >
-      {/* Halo d'ambiance */}
-      <div className="absolute w-72 h-72 md:w-96 md:h-96 rounded-full bg-gold/15 blur-3xl pointer-events-none" />
+      {/* Halo d'ambiance studio chaud */}
+      <div className="absolute w-72 h-72 md:w-96 md:h-96 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
       {isVisible ? (
         <Suspense fallback={<Hero3DFallback />}>
           <DynamicCanvas
-            camera={{ position: [0, 1.8, 4.5], fov: 45 }}
+            camera={{ position: [0, 2.2, 4.4], fov: 42 }}
             dpr={[1, 1.5]} // Plafonné à 1.5 pour fluidité sur téléphones Android d'entrée de gamme
             gl={{ antialias: false, powerPreference: 'low-power' }}
             frameloop="always"
             className="w-full h-full cursor-grab active:cursor-grabbing"
           >
-            <ambientLight intensity={0.7} />
-            <directionalLight position={[5, 6, 4]} intensity={1.5} color="#ffd875" />
-            <pointLight position={[-4, 2, -2]} intensity={1.2} color="#9d4edd" />
+            <ambientLight intensity={0.9} />
+            <directionalLight position={[4, 6, 3]} intensity={1.8} color="#fff4e0" />
+            <pointLight position={[-3, 3, -1]} intensity={0.9} color="#d4af37" />
+            <pointLight position={[2, 1, 2]} intensity={0.5} color="#ef4444" />
             <Vinyl3D isMobile={isMobile} />
           </DynamicCanvas>
         </Suspense>

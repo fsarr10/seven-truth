@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, Share2, Sparkles } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Disc, Radio, Sliders } from 'lucide-react';
 import { PortfolioItem } from '@/lib/types';
 
 interface AudioPlayerProps {
   tracks: PortfolioItem[];
 }
 
+/**
+ * Lecteur Audio Studio Master (Inspiré des consoles analogiques et racks d'écoute pro)
+ * Authentique, physique, tactile, sans artifices IA ni halos néons.
+ */
 export function AudioPlayer({ tracks }: AudioPlayerProps) {
   const audioTracks = tracks.filter((t) => t.category === 'audio');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -68,10 +72,20 @@ export function AudioPlayer({ tracks }: AudioPlayerProps) {
   if (!currentTrack) return null;
 
   return (
-    <div className="w-full glass-card rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden border border-white/10">
-      {/* Halo lumineux d'ambiance */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-neon-purple/10 rounded-full blur-2xl pointer-events-none" />
+    <div className="w-full bg-[#101116] border border-[#262833] rounded-2xl p-5 sm:p-6 shadow-2xl relative">
+      {/* 4 Vis de rack de studio aux 4 coins */}
+      <div className="absolute top-2.5 left-2.5 w-2 h-2 rounded-full border border-zinc-600 bg-zinc-800 flex items-center justify-center">
+        <div className="w-1 h-0.5 bg-zinc-500 rotate-45" />
+      </div>
+      <div className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full border border-zinc-600 bg-zinc-800 flex items-center justify-center">
+        <div className="w-1 h-0.5 bg-zinc-500 rotate-12" />
+      </div>
+      <div className="absolute bottom-2.5 left-2.5 w-2 h-2 rounded-full border border-zinc-600 bg-zinc-800 flex items-center justify-center">
+        <div className="w-1 h-0.5 bg-zinc-500 -rotate-45" />
+      </div>
+      <div className="absolute bottom-2.5 right-2.5 w-2 h-2 rounded-full border border-zinc-600 bg-zinc-800 flex items-center justify-center">
+        <div className="w-1 h-0.5 bg-zinc-500 rotate-90" />
+      </div>
 
       <audio
         ref={audioRef}
@@ -81,14 +95,32 @@ export function AudioPlayer({ tracks }: AudioPlayerProps) {
         onEnded={handleNext}
       />
 
-      <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-7 relative z-10">
-        {/* Disque vinyle rotatif avec pochette */}
-        <div className="relative flex-shrink-0 group cursor-pointer" onClick={togglePlay}>
+      {/* Barre supérieure d'étalonnage audio */}
+      <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3 mb-4 text-[11px] font-mono">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-zinc-400 uppercase tracking-widest font-semibold">
+            SEVEN TRUTH · MONITORING MASTER 01
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-zinc-500">
+          <span className="text-gold font-bold">24-BIT / 48kHz</span>
+          <span className="hidden sm:inline">OUTPUT: XLR BALANCED</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+        {/* Pochette vinyle avec bague laiton */}
+        <div
+          className="relative flex-shrink-0 cursor-pointer group"
+          onClick={togglePlay}
+          title={isPlaying ? 'Pause' : 'Lecture'}
+        >
           <div
-            className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-gold/40 shadow-2xl relative ${
+            className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gold/60 shadow-lg relative bg-black ${
               isPlaying ? 'animate-spin' : ''
             }`}
-            style={{ animationDuration: '6s' }}
+            style={{ animationDuration: '4.5s' }}
           >
             {currentTrack.thumbnail_url ? (
               <img
@@ -97,117 +129,131 @@ export function AudioPlayer({ tracks }: AudioPlayerProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-surface flex items-center justify-center text-gold">
-                <Music className="w-8 h-8" />
+              <div className="w-full h-full bg-[#181a22] flex items-center justify-center text-gold">
+                <Disc className="w-8 h-8" />
               </div>
             )}
-            {/* Trou central vinyle */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-6 h-6 rounded-full bg-background border-2 border-gold/60 shadow-inner flex items-center justify-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-              </div>
-            </div>
+            {/* Centre vinyle trou laiton */}
+            <div className="absolute inset-0 m-auto w-4 h-4 rounded-full bg-[#0a0a0c] border border-gold" />
           </div>
 
-          {/* Bouton play flottant au survol */}
-          <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
             {isPlaying ? (
-              <Pause className="w-8 h-8 text-gold fill-current" />
+              <Pause className="w-6 h-6 text-gold fill-current" />
             ) : (
-              <Play className="w-8 h-8 text-gold fill-current ml-1" />
+              <Play className="w-6 h-6 text-gold fill-current ml-0.5" />
             )}
           </div>
         </div>
 
-        {/* Détails du morceau & lecteur */}
-        <div className="flex-1 w-full text-center sm:text-left space-y-2">
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gold/15 text-gold border border-gold/30 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-ping" />
-              Master 24-bit / 96kHz
-            </span>
-
-            {/* Égaliseur animé live si lecture en cours */}
-            {isPlaying && (
-              <div className="flex items-end gap-1 h-3.5 px-2 py-0.5 rounded bg-surface border border-surface-border">
-                <span className="w-0.5 bg-gold rounded-full animate-equalizer1" />
-                <span className="w-0.5 bg-gold rounded-full animate-equalizer2" />
-                <span className="w-0.5 bg-gold rounded-full animate-equalizer3" />
-                <span className="w-0.5 bg-gold rounded-full animate-equalizer4" />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <h4 className="text-lg sm:text-xl font-display font-bold text-white tracking-tight">
-              {currentTrack.title}
-            </h4>
-            <p className="text-xs sm:text-sm text-zinc-400 font-medium">{currentTrack.artist}</p>
-          </div>
-
-          {/* Barre d'onde et de progression */}
-          <div className="pt-2 flex items-center gap-3">
-            <span className="text-[11px] font-mono text-zinc-400 w-10 text-right">
-              {formatSeconds(currentTime)}
-            </span>
-            <div className="flex-1 relative flex items-center">
-              <input
-                type="range"
-                min="0"
-                max={duration || 100}
-                value={currentTime}
-                onChange={handleSeek}
-                className="w-full h-1.5 bg-surface-tertiary rounded-lg appearance-none cursor-pointer accent-gold relative z-10"
-              />
+        {/* Détails du morceau & Fiche technique */}
+        <div className="flex-1 w-full space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <div>
+              <span className="text-[10px] font-mono text-gold uppercase tracking-wider block">
+                Session Studio #{currentIndex + 1}
+              </span>
+              <h3 className="font-display font-extrabold text-base sm:text-lg text-white">
+                {currentTrack.title}
+              </h3>
+              <p className="text-xs text-zinc-400">
+                {currentTrack.artist || 'Artiste Seven Truth'} · {currentTrack.duration || 'Session Studio'}
+              </p>
             </div>
-            <span className="text-[11px] font-mono text-zinc-400 w-10">
-              {formatSeconds(duration || 180)}
-            </span>
+
+            {/* VU-mètre numérique à segments */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0a0b0e] border border-zinc-800 self-start sm:self-auto">
+              <span className="text-[10px] font-mono text-zinc-500 uppercase">VU</span>
+              <div className="flex items-end gap-0.5 h-4">
+                {[40, 70, 95, 60, 85, 100, 50, 75].map((h, i) => (
+                  <div
+                    key={i}
+                    className={`w-1 rounded-sm transition-all duration-150 ${
+                      !isPlaying
+                        ? 'h-1 bg-zinc-800'
+                        : i >= 6
+                        ? 'bg-red-500'
+                        : i >= 4
+                        ? 'bg-amber-400'
+                        : 'bg-emerald-400'
+                    }`}
+                    style={{
+                      height: isPlaying ? `${Math.max(4, (h * (i + 1) * 11) % 16)}px` : '4px',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Contrôles de lecture */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <button
-            onClick={handlePrev}
-            className="p-3 rounded-full bg-surface border border-surface-border hover:border-gold/40 text-zinc-300 hover:text-white transition-all active:scale-95"
-            title="Morceau précédent"
-          >
-            <SkipBack className="w-4 h-4" />
-          </button>
+          {/* Curseur temporel de la bande */}
+          <div className="space-y-1">
+            <input
+              type="range"
+              min={0}
+              max={duration || 100}
+              value={currentTime}
+              onChange={handleSeek}
+              className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-gold"
+            />
+            <div className="flex justify-between text-[11px] font-mono text-zinc-500">
+              <span>{formatSeconds(currentTime)}</span>
+              <span>{formatSeconds(duration)}</span>
+            </div>
+          </div>
 
-          <button
-            onClick={togglePlay}
-            className="p-4 rounded-full bg-gradient-to-tr from-gold-dark via-gold to-gold-light text-background font-bold shadow-lg shadow-gold/30 hover:scale-105 transition-all active:scale-95"
-            title={isPlaying ? 'Pause' : 'Lecture'}
-          >
-            {isPlaying ? (
-              <Pause className="w-5 h-5 fill-current" />
-            ) : (
-              <Play className="w-5 h-5 fill-current ml-0.5" />
-            )}
-          </button>
+          {/* Boutons de commande analogiques */}
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePrev}
+                className="w-9 h-9 rounded-lg bg-[#181a24] hover:bg-[#202330] border border-zinc-700/60 text-zinc-300 flex items-center justify-center transition-colors active:scale-95"
+                title="Piste précédente"
+              >
+                <SkipBack className="w-4 h-4" />
+              </button>
 
-          <button
-            onClick={handleNext}
-            className="p-3 rounded-full bg-surface border border-surface-border hover:border-gold/40 text-zinc-300 hover:text-white transition-all active:scale-95"
-            title="Morceau suivant"
-          >
-            <SkipForward className="w-4 h-4" />
-          </button>
+              <button
+                onClick={togglePlay}
+                className="px-4 h-9 rounded-lg bg-gold hover:bg-gold-light text-[#0a0a0c] font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95 shadow-md"
+              >
+                {isPlaying ? (
+                  <>
+                    <Pause className="w-4 h-4 fill-current" />
+                    <span>PAUSE</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 fill-current ml-0.5" />
+                    <span>LECTURE</span>
+                  </>
+                )}
+              </button>
 
-          <button
-            onClick={() => {
-              if (audioRef.current) {
-                audioRef.current.muted = !isMuted;
-                setIsMuted(!isMuted);
-              }
-            }}
-            className="p-3 rounded-full bg-surface border border-surface-border hover:border-gold/40 text-zinc-400 hover:text-white transition-colors hidden md:inline-flex"
-            title={isMuted ? 'Activer le son' : 'Couper le son'}
-          >
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-          </button>
+              <button
+                onClick={handleNext}
+                className="w-9 h-9 rounded-lg bg-[#181a24] hover:bg-[#202330] border border-zinc-700/60 text-zinc-300 flex items-center justify-center transition-colors active:scale-95"
+                title="Piste suivante"
+              >
+                <SkipForward className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 text-zinc-400">
+              <button
+                onClick={() => {
+                  if (audioRef.current) {
+                    audioRef.current.muted = !isMuted;
+                    setIsMuted(!isMuted);
+                  }
+                }}
+                className="hover:text-gold p-1"
+                title={isMuted ? 'Activer le son' : 'Couper le son'}
+              >
+                {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
