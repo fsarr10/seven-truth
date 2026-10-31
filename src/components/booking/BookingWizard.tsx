@@ -6,6 +6,7 @@ import { Service, Space, BookingOption, Booking } from '@/lib/types';
 import { formatFCFA } from '@/lib/utils/currency';
 import { isSlotAllowedForNoise } from '@/lib/utils/noiseCheck';
 import { getWhatsAppBookingLink } from '@/lib/utils/whatsapp';
+import { SevenTruthLogo } from '@/components/brand/SevenTruthLogo';
 import confetti from 'canvas-confetti';
 import {
   Calendar, Clock, CheckCircle2, AlertTriangle, ShieldCheck,
@@ -835,7 +836,7 @@ export function BookingWizard({ initialServiceId, initialSpaceId, onSuccess }: B
             {/* Fiche récapitulative imprimable */}
             <div className="bg-surface border border-surface-border rounded-2xl p-5 text-left max-w-md mx-auto space-y-3 font-sans shadow-xl">
               <div className="flex justify-between items-center border-b border-surface-border pb-3">
-                <span className="font-display font-bold text-gold text-lg">SEVEN TRUTH</span>
+                <SevenTruthLogo variant="compact" size="sm" />
                 <span className="font-mono text-xs text-zinc-400 bg-surface-secondary px-2 py-1 rounded">
                   {confirmedBooking.booking_number}
                 </span>

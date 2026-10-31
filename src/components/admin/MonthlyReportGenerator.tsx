@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useLabelStore } from '@/lib/store/useLabelStore';
 import { formatFCFA } from '@/lib/utils/currency';
+import { SevenTruthLogo } from '@/components/brand/SevenTruthLogo';
 import { FileText, Printer, Download, Mail, CheckCircle2, PieChart, ShieldCheck } from 'lucide-react';
 
 export function MonthlyReportGenerator() {
@@ -66,15 +67,8 @@ export function MonthlyReportGenerator() {
         {/* Entête du Document */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-surface-border gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-display font-black text-2xl tracking-tight text-white print:text-black">
-                SEVEN TRUTH
-              </span>
-              <span className="text-xs font-bold text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/30">
-                LABEL & MEDIA
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 print:text-gray-600 mt-1">
+            <SevenTruthLogo variant="full" size="md" />
+            <p className="text-xs text-zinc-400 print:text-gray-600 mt-2">
               Quartier Dixième, Thiès, Sénégal • NINEA: 00984512 • contact@seventruth.sn
             </p>
           </div>

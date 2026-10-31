@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { SevenTruthLogo } from '@/components/brand/SevenTruthLogo';
 import {
   Menu, X, Music, Calendar, Camera, Disc, Sparkles,
   Shield, User, ArrowRight, Radio
@@ -27,25 +28,9 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 px-3 sm:px-6 py-2.5 transition-all">
       <div className="max-w-7xl mx-auto glass-panel rounded-2xl px-4 sm:px-6 h-16 flex items-center justify-between shadow-2xl border border-white/[0.08]">
-        {/* Logo Seven Truth 7T */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-gold-dark via-gold to-gold-light p-0.5 shadow-lg shadow-gold/25 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center">
-              <span className="font-display font-black text-lg text-gold group-hover:tracking-wider transition-all">
-                7T
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display font-extrabold text-white text-base tracking-tight leading-none group-hover:text-gold transition-colors">
-              SEVEN TRUTH
-            </span>
-            <span className="text-[10px] uppercase tracking-widest text-zinc-400 font-semibold flex items-center gap-1 mt-0.5">
-              <span>Label & Media</span>
-              <span className="text-gold">•</span>
-              <span className="text-gold font-bold">Thiès</span>
-            </span>
-          </div>
+        {/* Logo Officiel Seven Truth 7T */}
+        <Link href="/" className="flex items-center">
+          <SevenTruthLogo variant="full" size="md" />
         </Link>
 
         {/* Liens Desktop */}

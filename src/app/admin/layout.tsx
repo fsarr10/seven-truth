@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLabelStore } from '@/lib/store/useLabelStore';
+import { SevenTruthLogo } from '@/components/brand/SevenTruthLogo';
 import {
   LayoutDashboard, Calendar, Camera, Package, DollarSign,
   FileText, ShieldCheck, Users, Sliders, ArrowLeft, Menu, X,
@@ -38,12 +39,10 @@ export default function AdminLayout({
       {/* Barre de navigation mobile */}
       <div className="md:hidden flex items-center justify-between p-4 bg-surface-secondary border-b border-surface-border">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gold text-background font-black flex items-center justify-center font-display text-sm">
-            7T
-          </div>
+          <SevenTruthLogo variant="mark" size={32} />
           <div>
-            <span className="font-bold text-white text-sm block">Gestion Seven Truth</span>
-            <span className="text-[10px] text-gold capitalize">{currentUserName}</span>
+            <span className="font-bold text-white text-sm block leading-none">SEVEN TRUTH</span>
+            <span className="text-[10px] text-gold capitalize mt-0.5 block">{currentUserName}</span>
           </div>
         </div>
 
@@ -64,14 +63,8 @@ export default function AdminLayout({
         <div className="p-5 space-y-6">
           {/* En-tête Sidebar */}
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-9 h-9 rounded-xl bg-gold text-background font-black flex items-center justify-center font-display text-sm shadow-md shadow-gold/20">
-                7T
-              </div>
-              <div>
-                <span className="font-display font-bold text-white text-sm block">SEVEN TRUTH</span>
-                <span className="text-[10px] text-zinc-400">Back-office Thiès</span>
-              </div>
+            <Link href="/" className="flex items-center">
+              <SevenTruthLogo variant="compact" size="sm" />
             </Link>
           </div>
 
