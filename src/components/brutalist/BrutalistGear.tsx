@@ -108,15 +108,15 @@ export function BrutalistGear({
           <div
             key={item.ref}
             onClick={handleClick}
-            className="group cursor-pointer border-r-[1.5px] border-b-[1.5px] border-[#121110] p-6 sm:p-7 flex flex-col justify-between min-h-[260px] bg-[#f1eadd] hover:bg-[#e8dfcf] transition-all duration-300"
+            className="group cursor-pointer border-r-[1.5px] border-b-[1.5px] border-[#121110] p-6 sm:p-7 flex flex-col justify-between min-h-[260px] bg-[#f1eadd] hover:bg-[#e8dfcf] active:bg-[#e8dfcf] transition-all duration-300"
           >
-            {/* Haut : Réf + Icône qui tourne au survol */}
+            {/* Haut : Réf + Icône qui tourne au survol et pulse sur mobile */}
             <div className="space-y-4">
               <div className="flex items-start justify-between">
                 <span className="font-mono text-xs font-bold text-[#d7261e] tracking-[0.06em]">
                   [{item.ref}]
                 </span>
-                <div className="text-[#121110] group-hover:text-[#d7261e] group-hover:scale-110 group-hover:-rotate-8 transition-transform duration-300">
+                <div className="text-[#121110] group-hover:text-[#d7261e] group-hover:scale-110 group-hover:-rotate-8 group-active:scale-110 group-active:-rotate-8 transition-transform duration-300 max-[767px]:text-[#d7261e]">
                   {item.icon}
                 </div>
               </div>

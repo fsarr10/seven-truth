@@ -11,11 +11,10 @@ export function BrutalistFooter() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || !footerRef.current || !jerejefRef.current) return;
+    if (!footerRef.current || !jerejefRef.current) return;
 
-    // Parallaxe de « JËRËJËF » qui remonte
-    gsap.fromTo(
+    // Parallaxe de « JËRËJËF » qui remonte (fluide sur mobile et desktop)
+    const anim = gsap.fromTo(
       jerejefRef.current,
       { yPercent: 25 },
       {
@@ -31,9 +30,9 @@ export function BrutalistFooter() {
     );
 
     return () => {
-      ScrollTrigger.getAll().forEach((st) => {
-        if (st.trigger === footerRef.current) st.kill();
-      });
+      if (anim.scrollTrigger) {
+        anim.scrollTrigger.kill();
+      }
     };
   }, []);
 

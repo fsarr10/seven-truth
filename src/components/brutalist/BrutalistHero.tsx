@@ -23,107 +23,94 @@ export function BrutalistHero() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
-    // Découpage en lettres pour animation d'arrivée
-    const splitLetters = (el: HTMLElement | null) => {
-      if (!el) return [];
-      const text = el.innerText;
-      el.innerHTML = '';
-      return text.split('').map((char) => {
-        const span = document.createElement('span');
-        span.innerText = char;
-        span.style.display = 'inline-block';
-        span.style.willChange = 'transform, opacity';
-        el.appendChild(span);
-        return span;
-      });
-    };
-
-    const sevenLetters = splitLetters(sevenWordRef.current);
-    const truthLetters = splitLetters(truthWordRef.current);
+    const sevenLetters = heroRef.current?.querySelectorAll('.seven-char');
+    const truthLetters = heroRef.current?.querySelectorAll('.truth-char');
 
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-    // 1. Animation d'arrivée lettre par lettre
-    tl.set([sevenLetters, truthLetters], { yPercent: 120, opacity: 0, rotateZ: 4 })
-      .to(sevenLetters, {
-        yPercent: 0,
-        opacity: 1,
-        rotateZ: 0,
-        duration: 1.1,
-        stagger: 0.05,
-      })
-      .to(
-        truthLetters,
+    // 1. Animation d'arrivée lettre par lettre (fluide sur mobile et desktop)
+    if (sevenLetters && truthLetters && sevenLetters.length > 0) {
+      tl.fromTo(
+        sevenLetters,
+        { yPercent: 110, opacity: 0, rotateZ: 3 },
         {
           yPercent: 0,
           opacity: 1,
           rotateZ: 0,
-          duration: 1.1,
+          duration: 1.0,
+          stagger: 0.05,
+        }
+      ).fromTo(
+        truthLetters,
+        { yPercent: 110, opacity: 0, rotateZ: -3 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          rotateZ: 0,
+          duration: 1.0,
           stagger: 0.05,
         },
-        '-=0.8'
+        '-=0.75'
       );
+    }
 
     // 2. Arrivée du vinyle 3D et des barres d'informations
     if (vinylWrapperRef.current) {
       tl.fromTo(
         vinylWrapperRef.current,
-        { scale: 0.7, opacity: 0, rotateZ: -90 },
-        { scale: 1, opacity: 1, rotateZ: 0, duration: 1.3, ease: 'expo.out' },
-        '-=1.0'
+        { scale: 0.75, opacity: 0, rotateZ: -75 },
+        { scale: 1, opacity: 1, rotateZ: 0, duration: 1.2, ease: 'expo.out' },
+        '-=0.9'
       );
     }
 
     if (infoBarRef.current && bottomBarRef.current && badgeRef.current) {
       tl.fromTo(
         [infoBarRef.current, bottomBarRef.current, badgeRef.current],
-        { opacity: 0, y: 20 },
+        { opacity: 0, y: 15 },
         { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 },
         '-=0.6'
       );
     }
 
     // 3. Parallaxe au scroll du Hero
+    const heroTriggers: ScrollTrigger[] = [];
     if (heroRef.current && sevenWordRef.current && truthWordRef.current && vinylWrapperRef.current) {
-      gsap.to(sevenWordRef.current, {
-        xPercent: -8,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
+      const st1 = ScrollTrigger.create({
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5,
+        animation: gsap.to(sevenWordRef.current, { xPercent: -8, ease: 'none' }),
       });
 
-      gsap.to(truthWordRef.current, {
-        xPercent: 8,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
+      const st2 = ScrollTrigger.create({
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5,
+        animation: gsap.to(truthWordRef.current, { xPercent: 8, ease: 'none' }),
       });
 
-      gsap.to(vinylWrapperRef.current, {
-        yPercent: -20,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
+      const st3 = ScrollTrigger.create({
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5,
+        animation: gsap.to(vinylWrapperRef.current, { yPercent: -18, ease: 'none' }),
       });
+
+      heroTriggers.push(st1, st2, st3);
     }
 
+    // Actualisation du layout ScrollTrigger après chargement des polices sur mobile
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 300);
+
     return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+      clearTimeout(timer);
+      heroTriggers.forEach((st) => st.kill());
     };
   }, []);
 
@@ -153,7 +140,11 @@ export function BrutalistHero() {
             ref={sevenWordRef}
             className="font-anton uppercase tracking-tighter text-[#121110] leading-[0.8] text-[clamp(104px,23.5vw,400px)] max-[600px]:text-[31vw]"
           >
-            SEVEN
+            {'SEVEN'.split('').map((char, idx) => (
+              <span key={idx} className="seven-char inline-block will-change-transform">
+                {char}
+              </span>
+            ))}
           </h1>
         </div>
 
@@ -171,7 +162,11 @@ export function BrutalistHero() {
             ref={truthWordRef}
             className="font-anton uppercase tracking-tighter text-[#d7261e] leading-[0.8] text-[clamp(104px,23.5vw,400px)] max-[600px]:text-[31vw]"
           >
-            TRUTH
+            {'TRUTH'.split('').map((char, idx) => (
+              <span key={idx} className="truth-char inline-block will-change-transform">
+                {char}
+              </span>
+            ))}
           </h2>
         </div>
 

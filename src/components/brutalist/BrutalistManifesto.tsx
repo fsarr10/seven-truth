@@ -11,35 +11,40 @@ export function BrutalistManifesto() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || !textRef.current || !sectionRef.current) return;
+    if (!textRef.current || !sectionRef.current) return;
 
     const words = textRef.current.querySelectorAll('.word-reveal');
+    if (!words || words.length === 0) return;
 
-    // ScrollTrigger scrub : chaque mot s'allume au fil du défilement
-    gsap.fromTo(
+    // ScrollTrigger scrub : chaque mot s'allume au fil du défilement (optimisé mobile & desktop)
+    const anim = gsap.fromTo(
       words,
-      { opacity: 0.25, color: '#3c3833' },
+      { opacity: 0.35, color: '#3c3833' },
       {
         opacity: 1,
         color: (i, target) => {
           return target.classList.contains('word-red') ? '#d7261e' : '#f1eadd';
         },
-        stagger: 0.1,
+        stagger: 0.08,
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 70%',
-          end: 'bottom 40%',
-          scrub: 0.5,
+          start: 'top 85%',
+          end: 'bottom 25%',
+          scrub: 0.4,
         },
       }
     );
 
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+
     return () => {
-      ScrollTrigger.getAll().forEach((st) => {
-        if (st.trigger === sectionRef.current) st.kill();
-      });
+      clearTimeout(timer);
+      if (anim.scrollTrigger) {
+        anim.scrollTrigger.kill();
+      }
     };
   }, []);
 

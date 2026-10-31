@@ -179,7 +179,7 @@ export function BrutalistVinyl3D() {
     scene.add(mousePointLight);
 
     // 5. VARIABLES DE CONTRÔLE D'INTERACTION & SCROLL
-    let baseSpinSpeed = prefersReducedMotion ? 0 : 0.8;
+    let baseSpinSpeed = prefersReducedMotion ? 0.3 : 0.85;
     let scrollSpinBoost = 0;
     let lastScrollY = window.scrollY;
     let targetRotX = Math.PI / 3;
@@ -195,9 +195,8 @@ export function BrutalistVinyl3D() {
     }, { threshold: 0.05 });
     observer.observe(container);
 
-    // Détection de la souris
+    // Détection de la souris (desktop)
     const onMouseMove = (e: MouseEvent) => {
-      if (prefersReducedMotion) return;
       const rect = container.getBoundingClientRect();
       const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
@@ -208,17 +207,75 @@ export function BrutalistVinyl3D() {
       mousePointLight.position.set(nx * 3, ny * 3, 3.8);
     };
 
-    // Détection du scroll (accélération de rotation)
+    // Détection du touch (mobile swipe / drag)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isTouching = false;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        isTouching = true;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 0 || !container) return;
+      const touch = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const nx = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -(((touch.clientY - rect.top) / rect.height) * 2 - 1);
+
+      const clampedX = Math.max(-1.5, Math.min(1.5, nx));
+      const clampedY = Math.max(-1.5, Math.min(1.5, ny));
+
+      targetRotX = (Math.PI / 3) + clampedY * 0.3;
+      targetRotY = clampedX * 0.4;
+
+      mousePointLight.position.set(clampedX * 3, clampedY * 3, 3.8);
+
+      // Impulsion de rotation au glissement du doigt
+      const deltaX = touch.clientX - touchStartX;
+      touchStartX = touch.clientX;
+      scrollSpinBoost += Math.abs(deltaX) * 0.02;
+    };
+
+    const onTouchEnd = () => {
+      isTouching = false;
+    };
+
+    // Détection du gyroscope / inclinaison du smartphone (mobile)
+    const onDeviceOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma !== null && e.beta !== null) {
+        // gamma: gauche/droite (-90 à 90)
+        // beta: avant/arrière (-180 à 180)
+        const gamma = Math.max(-35, Math.min(35, e.gamma));
+        const beta = Math.max(20, Math.min(70, e.beta));
+
+        const normX = gamma / 35;
+        const normY = (beta - 45) / 25;
+
+        targetRotY = normX * 0.35;
+        targetRotX = (Math.PI / 3) + normY * 0.25;
+
+        mousePointLight.position.set(normX * 3, normY * 3, 3.8);
+      }
+    };
+
+    // Détection du scroll (accélération de rotation sur desktop et mobile)
     const onScroll = () => {
       const currentScrollY = window.scrollY;
       const delta = Math.abs(currentScrollY - lastScrollY);
       lastScrollY = currentScrollY;
-      if (!prefersReducedMotion) {
-        scrollSpinBoost += delta * 0.005;
-      }
+      scrollSpinBoost += delta * 0.008;
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('deviceorientation', onDeviceOrientation, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Redimensionnement réactif
@@ -239,21 +296,19 @@ export function BrutalistVinyl3D() {
 
       if (!isVisible || document.hidden) return;
 
-      const deltaSeconds = (time - lastTime) / 1000;
+      const deltaSeconds = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
 
-      if (!prefersReducedMotion) {
-        // Rotation continue + impulsion du scroll
-        const currentSpeed = baseSpinSpeed + scrollSpinBoost;
-        vinylMesh.rotation.y += currentSpeed * deltaSeconds;
+      // Rotation continue + impulsion du scroll et touch
+      const currentSpeed = baseSpinSpeed + scrollSpinBoost;
+      vinylMesh.rotation.y += currentSpeed * deltaSeconds;
 
-        // Amortissement de l'élan de rotation
-        scrollSpinBoost = Math.max(0, scrollSpinBoost - deltaSeconds * 1.6);
+      // Amortissement de l'élan de rotation
+      scrollSpinBoost = Math.max(0, scrollSpinBoost - deltaSeconds * 1.8);
 
-        // Inertie de suivi de souris
-        vinylMesh.rotation.x = THREE.MathUtils.lerp(vinylMesh.rotation.x, targetRotX, deltaSeconds * 3.5);
-        vinylMesh.rotation.z = THREE.MathUtils.lerp(vinylMesh.rotation.z, -targetRotY * 0.5, deltaSeconds * 3.5);
-      }
+      // Inertie de suivi souris / gyroscope / touch
+      vinylMesh.rotation.x = THREE.MathUtils.lerp(vinylMesh.rotation.x, targetRotX, deltaSeconds * 4.0);
+      vinylMesh.rotation.z = THREE.MathUtils.lerp(vinylMesh.rotation.z, -targetRotY * 0.5, deltaSeconds * 4.0);
 
       renderer.render(scene, camera);
     };
@@ -263,6 +318,10 @@ export function BrutalistVinyl3D() {
     return () => {
       cancelAnimationFrame(reqId);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('deviceorientation', onDeviceOrientation);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       motionQuery.removeEventListener('change', motionHandler);
@@ -273,18 +332,20 @@ export function BrutalistVinyl3D() {
     };
   }, [prefersReducedMotion]);
 
-  // REPLI SANS WEBGL OU SI PREFERS-REDUCED-MOTION
+  // REPLI SANS WEBGL AVEC ROTATION CSS FLUIDE
   if (!hasWebGL) {
     return (
       <div className="relative w-full h-full flex items-center justify-center">
         <div
-          className="w-72 h-72 sm:w-96 sm:h-96 rounded-full border-[1.5px] border-[#121110] relative flex items-center justify-center shadow-2xl"
+          className="w-72 h-72 sm:w-96 sm:h-96 rounded-full border-[1.5px] border-[#121110] relative flex items-center justify-center shadow-2xl animate-spin"
           style={{
             background: 'repeating-radial-gradient(circle at center, #141312 0px, #141312 3px, #262422 4px, #141312 5px)',
             transform: 'rotateX(55deg)',
+            animationDuration: '10s',
+            animationTimingFunction: 'linear',
           }}
         >
-          <div className="w-28 h-28 rounded-full bg-[#d7261e] border-[1.5px] border-[#f1eadd] flex flex-col items-center justify-center text-[#f1eadd] font-display font-black text-2xl">
+          <div className="w-28 h-28 rounded-full bg-[#d7261e] border-[1.5px] border-[#f1eadd] flex flex-col items-center justify-center text-[#f1eadd] font-anton text-2xl">
             <span>7T</span>
           </div>
         </div>
