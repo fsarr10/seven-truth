@@ -1,9 +1,14 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Anton, Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google';
 import './globals.css';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { BottomMobileNav } from '@/components/layout/BottomMobileNav';
+import { PaperTexture } from '@/components/layout/PaperTexture';
+
+const anton = Anton({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-anton',
+  display: 'swap',
+});
 
 const inter = Inter({
   subsets: ['latin'],
@@ -11,48 +16,55 @@ const inter = Inter({
   display: 'swap',
 });
 
-const spaceGrotesk = Space_Grotesk({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
 export const viewport: Viewport = {
-  themeColor: '#e8b23a',
+  themeColor: '#d7261e',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
 };
 
 export const metadata: Metadata = {
-  title: 'Seven Truth — Studio d\'enregistrement, Média & Matériel à Thiès (Sénégal)',
-  description: 'Label musical et média à Thiès. Studio d\'enregistrement insonorisé, plateau TV & podcast multi-caméras, shooting photo professionnel et location de matériel audiovisuel (Sony FX3, A7IV). Réservation et paiement en ligne par Wave et Orange Money.',
+  title: 'Seven Truth — Studio, Podcast & Shooting à Thiès',
+  description:
+    'Label indépendant à Thiès, Sénégal : studio son insonorisé, plateau TV & podcast multi-caméras 4K, salle shooting photo et location de matériel audiovisuel.',
   keywords: [
     'studio d\'enregistrement Thiès',
     'location matériel vidéo Thiès',
     'shooting photo Thiès',
     'podcast Thiès',
     'beatmaking Sénégal',
-    'clip vidéo Thiès',
-    'mix mastering Dakar Thiès',
     'Seven Truth',
-    'Wave Orange Money studio'
+    'studio son Sénégal'
   ],
-  authors: [{ name: 'Seven Truth Label & Media' }],
+  authors: [{ name: 'Seven Truth Studio & Records' }],
   openGraph: {
-    title: 'Seven Truth — Label Musical, Studio & Média à Thiès',
-    description: 'Enregistrez votre son, tournez votre émission podcast et louez du matériel cinéma au studio Seven Truth à Thiès.',
-    url: 'https://seventruth.sn',
+    title: 'Seven Truth — Studio, Podcast & Shooting à Thiès',
+    description:
+      'Un studio son, un plateau TV & podcast et une salle shooting sous le même toit à Thiès. Réservez votre séance avec acompte Wave ou Orange Money.',
+    url: 'https://seven-truth.vercel.app',
     siteName: 'Seven Truth',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&q=80',
+        url: '/logo.svg',
         width: 1200,
         height: 630,
-        alt: 'Seven Truth Studio Thiès'
-      }
+        alt: 'Seven Truth Studio Thiès',
+      },
     ],
-    locale: 'fr_FR',
+    locale: 'fr_SN',
     type: 'website',
   },
   manifest: '/manifest.json',
@@ -64,14 +76,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="min-h-screen flex flex-col font-sans bg-background text-zinc-100 antialiased selection:bg-gold selection:text-background pb-16 sm:pb-0">
-        <Navbar />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-        <BottomMobileNav />
+    <html
+      lang="fr"
+      className={`${anton.variable} ${inter.variable} ${jetbrainsMono.variable} ${playfairDisplay.variable}`}
+    >
+      <body className="min-h-screen bg-[#f1eadd] text-[#121110] antialiased selection:bg-[#d7261e] selection:text-[#f1eadd]">
+        <PaperTexture />
+        <main>{children}</main>
       </body>
     </html>
   );

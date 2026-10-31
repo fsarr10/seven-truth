@@ -2,76 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: #07070a;
-    --foreground: #f8fafc;
-  }
+:root {
+  --paper: #f1eadd;
+  --paper2: #e8dfcf;
+  --ink: #121110;
+  --ink2: #2a2724;
+  --mut: #5d564c;
+  --red: #d7261e;
+  --red-d: #b01c15;
+  --amber: #d97706;
+  --pad: clamp(16px, 3.2vw, 40px);
+}
 
+@layer base {
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-feature-settings: "rlig" 1, "calt" 1;
-    overflow-x: hidden;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: 
-      radial-gradient(at 10% 20%, rgba(243, 186, 73, 0.05) 0px, transparent 40%),
-      radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.04) 0px, transparent 40%),
-      radial-gradient(at 50% 90%, rgba(6, 182, 212, 0.04) 0px, transparent 50%);
-    background-attachment: fixed;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--red) !important;
+    outline-offset: 3px !important;
   }
 }
 
-/* Glassmorphism Classes */
-.glass-panel {
-  background: rgba(18, 18, 27, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+/* Polices & Typographie */
+.font-anton {
+  font-family: var(--font-anton), Impact, -apple-system, sans-serif;
 }
 
-.glass-card {
-  background: linear-gradient(135deg, rgba(25, 25, 38, 0.65) 0%, rgba(15, 15, 23, 0.75) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.font-mono {
+  font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-.glass-card:hover {
-  border-color: rgba(243, 186, 73, 0.35);
-  box-shadow: 0 10px 30px -10px rgba(243, 186, 73, 0.15);
-  transform: translateY(-2px);
+.font-serif {
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
-/* Gold Text Shimmer */
-.gold-gradient-text {
-  background: linear-gradient(135deg, #fff2cc 0%, #f3ba49 50%, #d49520 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.font-sans {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Custom Scrollbar */
+.ease-custom {
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Animations Marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Défilement fluide */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar Brutaliste */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #07070a;
+  background: var(--paper);
+  border-left: 1.5px solid var(--ink);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #232334;
-  border-radius: 4px;
+  background: var(--ink);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f3ba49;
+  background: var(--red);
 }
 
-/* Print styles for receipts and monthly reports */
+/* Styles pour impression des reçus */
 @media print {
   body {
     background: white !important;
