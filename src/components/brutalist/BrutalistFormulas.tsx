@@ -78,8 +78,10 @@ export function BrutalistFormulas({
   onSelectFormula?: (serviceId: string) => void;
 }) {
   const [hoveredTrack, setHoveredTrack] = useState<string | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<string>('A1');
 
   const handleClick = (track: Track) => {
+    setSelectedTrack(track.code);
     if (onSelectFormula) {
       onSelectFormula(track.serviceId);
     }
@@ -130,26 +132,28 @@ export function BrutalistFormulas({
 
             <div className="space-y-4">
               {SIDE_A.map((track) => {
-                const isHovered = hoveredTrack === track.code;
+                const isActive = hoveredTrack === track.code || selectedTrack === track.code;
                 return (
                   <div
                     key={track.code}
                     onClick={() => handleClick(track)}
                     onMouseEnter={() => setHoveredTrack(track.code)}
                     onMouseLeave={() => setHoveredTrack(null)}
-                    className="cursor-pointer border-b border-dashed border-[#121110]/30 pb-3 flex items-baseline justify-between gap-4 group transition-all"
+                    className={`cursor-pointer border-b border-dashed border-[#121110]/30 pb-3 flex items-baseline justify-between gap-4 group transition-all ${
+                      isActive ? 'bg-[#121110]/5 pl-2' : ''
+                    }`}
                   >
                     <div className="flex items-baseline gap-2.5 flex-1 min-w-0">
-                      {/* Code piste + Flèche lecture au survol */}
+                      {/* Code piste + Flèche lecture */}
                       <span className="font-mono text-xs font-bold text-[#d7261e] flex-shrink-0 w-8">
-                        {isHovered ? '▶ ' : ''}{track.code}
+                        {isActive ? '▶ ' : ''}{track.code}
                       </span>
 
                       {/* Titre & Sous-titre */}
                       <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 truncate">
                         <span
                           className={`font-anton text-base sm:text-lg uppercase tracking-tight transition-colors ${
-                            isHovered ? 'text-[#d7261e]' : 'text-[#121110]'
+                            isActive ? 'text-[#d7261e]' : 'text-[#121110]'
                           }`}
                         >
                           {track.title}
@@ -183,24 +187,26 @@ export function BrutalistFormulas({
 
             <div className="space-y-4">
               {SIDE_B.map((track) => {
-                const isHovered = hoveredTrack === track.code;
+                const isActive = hoveredTrack === track.code || selectedTrack === track.code;
                 return (
                   <div
                     key={track.code}
                     onClick={() => handleClick(track)}
                     onMouseEnter={() => setHoveredTrack(track.code)}
                     onMouseLeave={() => setHoveredTrack(null)}
-                    className="cursor-pointer border-b border-dashed border-[#121110]/30 pb-3 flex items-baseline justify-between gap-4 group transition-all"
+                    className={`cursor-pointer border-b border-dashed border-[#121110]/30 pb-3 flex items-baseline justify-between gap-4 group transition-all ${
+                      isActive ? 'bg-[#121110]/5 pl-2' : ''
+                    }`}
                   >
                     <div className="flex items-baseline gap-2.5 flex-1 min-w-0">
                       <span className="font-mono text-xs font-bold text-[#d7261e] flex-shrink-0 w-8">
-                        {isHovered ? '▶ ' : ''}{track.code}
+                        {isActive ? '▶ ' : ''}{track.code}
                       </span>
 
                       <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 truncate">
                         <span
                           className={`font-anton text-base sm:text-lg uppercase tracking-tight transition-colors ${
-                            isHovered ? 'text-[#d7261e]' : 'text-[#121110]'
+                            isActive ? 'text-[#d7261e]' : 'text-[#121110]'
                           }`}
                         >
                           {track.title}

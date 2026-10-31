@@ -275,6 +275,9 @@ export function BrutalistVinyl3D() {
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('touchend', onTouchEnd, { passive: true });
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    container.addEventListener('touchmove', onTouchMove, { passive: true });
+    container.addEventListener('touchend', onTouchEnd, { passive: true });
     window.addEventListener('deviceorientation', onDeviceOrientation, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -321,6 +324,9 @@ export function BrutalistVinyl3D() {
       window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('touchend', onTouchEnd);
+      container?.removeEventListener('touchstart', onTouchStart);
+      container?.removeEventListener('touchmove', onTouchMove);
+      container?.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('deviceorientation', onDeviceOrientation);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
@@ -356,7 +362,7 @@ export function BrutalistVinyl3D() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[360px] sm:h-[460px] md:h-[520px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+      className="relative w-full h-[360px] sm:h-[460px] md:h-[520px] flex items-center justify-center cursor-grab active:cursor-grabbing touch-none select-none"
       aria-hidden="true"
     />
   );
