@@ -1,7 +1,10 @@
 # SEVEN TRUTH — Plateforme Web Complète (Site Vitrine & Back-Office)
 
 > **Label musical & média indépendant installé à Thiès, Sénégal.**  
-> Studio d'enregistrement insonorisé, plateau TV & podcast, salle shooting photo et location de matériel de tournage.
+> Studio d'enregistrement insonorisé, plateau TV & podcast, salle shooting photo et location de matériel de tournage.  
+> 🌐 **URL de Production Déployée** : [https://seven-truth.vercel.app](https://seven-truth.vercel.app)  
+> 🔒 **Accès Back-Office** : [https://seven-truth.vercel.app/admin](https://seven-truth.vercel.app/admin)  
+> 📅 **Réservation en Ligne** : [https://seven-truth.vercel.app/reserver](https://seven-truth.vercel.app/reserver)
 
 ---
 
