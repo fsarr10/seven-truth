@@ -3,7 +3,6 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { RoleSwitcherBanner } from '@/components/layout/RoleSwitcherBanner';
 import { BottomMobileNav } from '@/components/layout/BottomMobileNav';
 
 const inter = Inter({
@@ -67,7 +66,6 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="min-h-screen flex flex-col font-sans bg-background text-zinc-100 antialiased selection:bg-gold selection:text-background pb-16 sm:pb-0">
-        <RoleSwitcherBanner />
         <Navbar />
         <main className="flex-1">
           {children}

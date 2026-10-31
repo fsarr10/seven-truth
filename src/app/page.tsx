@@ -25,16 +25,13 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Colonne gauche : Typographie éditoriale & Badges techniques */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left relative z-10">
-            {/* Télémétrie studio en temps réel */}
+            {/* Télémétrie studio */}
             <div className="inline-flex flex-wrap items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-[#14151c] border border-zinc-800 text-xs font-mono">
-              <span className="flex items-center gap-1.5 text-red-400 font-bold">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                REC ON AIR
-              </span>
+              <span className="text-gold font-semibold">THIÈS · QUARTIER DIXIÈME</span>
               <span className="text-zinc-600">|</span>
-              <span className="text-zinc-300">THIÈS · QUARTIER DIXIÈME</span>
+              <span className="text-zinc-300">LABEL &amp; STUDIO D'ENREGISTREMENT</span>
               <span className="text-zinc-600 hidden sm:inline">|</span>
-              <span className="text-gold font-semibold hidden sm:inline">CONSOLE APOLLO X8</span>
+              <span className="text-zinc-400 hidden sm:inline">SÉNÉGAL</span>
             </div>
 
             <h1 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.08]">

@@ -25,7 +25,7 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-[37px] z-40 px-3 sm:px-6 py-2.5 transition-all">
+    <header className="sticky top-0 z-40 px-3 sm:px-6 py-2.5 transition-all">
       <div className="max-w-7xl mx-auto glass-panel rounded-2xl px-4 sm:px-6 h-16 flex items-center justify-between shadow-2xl border border-white/[0.08]">
         {/* Logo Seven Truth 7T */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -35,7 +35,6 @@ export function Navbar() {
                 7T
               </span>
             </div>
-            <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-background animate-pulse" title="Studio ouvert" />
           </div>
           <div className="flex flex-col">
             <span className="font-display font-extrabold text-white text-base tracking-tight leading-none group-hover:text-gold transition-colors">
